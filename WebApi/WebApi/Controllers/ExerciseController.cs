@@ -43,7 +43,7 @@ namespace WebApi.Controllers
 
         // POST api/exercise
         [HttpPost]
-        public Exercise PostAnswer([FromBody]string value)
+        public Exercise PostAnswer([FromBody]Exercise exercise)
         {
             try
             {
@@ -51,14 +51,15 @@ namespace WebApi.Controllers
                 //{
                 //    return StatusCode(HttpStatusCode.Unauthorized);
                 //}
-                Exercise.checkAnswer(value, ref _currentExercise);
-                return _currentExercise;
+                var checkedEx = exercise;
+                Exercise.checkAnswer(checkedEx);
+                return checkedEx;
             }
             catch (Exception exc)
             {
                 //log exception here?
                 _logger.LogError(exc, "Failed to generate exercise");
-                return null;
+                throw new InvalidProgramException();
             }
         }
     }

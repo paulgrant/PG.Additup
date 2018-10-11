@@ -57,8 +57,8 @@ namespace WebApi.Tests
             newExercise.leftNumber = 2;
             newExercise.rightNumber = 2;
             newExercise.mathOperator = Enums.Operator.add;
-            var answerValue = "4";
-            Exercise.checkAnswer(answerValue, ref newExercise);
+            newExercise.answer = "4";
+            Exercise.checkAnswer(newExercise);
             Assert.IsTrue(newExercise.correctAnswerGiven);
         }
 
@@ -69,8 +69,8 @@ namespace WebApi.Tests
             newExercise.leftNumber = 2;
             newExercise.rightNumber = 2;
             newExercise.mathOperator = Enums.Operator.add;
-            var answerValue = "5";
-            Exercise.checkAnswer(answerValue, ref newExercise);
+            newExercise.answer = "5";
+            Exercise.checkAnswer(newExercise);
             Assert.IsFalse(newExercise.correctAnswerGiven);
         }
 

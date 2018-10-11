@@ -11,6 +11,7 @@ namespace WebApi.Model
         public int leftNumber;
         public int rightNumber;
         public Operator mathOperator;
+        public String answer;
         public bool correctAnswerGiven = false;
 
         public Exercise() { }
@@ -49,15 +50,15 @@ namespace WebApi.Model
             return newExercise;
         }
 
-        public static void checkAnswer(string value, ref Exercise currentExercise)
+        public static void checkAnswer(Exercise currentExercise)
         {
-            if(value == null)
+            if(currentExercise.answer == null)
             {
                 currentExercise.correctAnswerGiven = false;
             }
             else
             {
-                double.TryParse(value, out double answerValue);
+                double.TryParse(currentExercise.answer, out double answerValue);
                 double _calculatedAnswer = 0;
                 switch (currentExercise.mathOperator)
                 {
