@@ -1,0 +1,19 @@
+{
+  "name": "additup-common",
+  "version": "1.0.0",
+  "description": "commonjs library for AddItUp app written in TypeScript",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha -r ts-node/register  tests/**/*.test.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/mocha": "^5.2.5",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "ts-node": "^7.0.0",
+    "typescript": "^3.0.1"
+  }
+}
