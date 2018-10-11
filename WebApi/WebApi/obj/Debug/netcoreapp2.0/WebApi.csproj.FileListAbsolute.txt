@@ -1,0 +1,11 @@
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi\obj\Debug\netcoreapp2.0\WebApi.csprojAssemblyReference.cache
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi\obj\Debug\netcoreapp2.0\WebApi.csproj.CoreCompileInputs.cache
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi\obj\Debug\netcoreapp2.0\WebApi.AssemblyInfoInputs.cache
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi\obj\Debug\netcoreapp2.0\WebApi.AssemblyInfo.cs
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi\bin\Debug\netcoreapp2.0\WebApi.deps.json
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi\bin\Debug\netcoreapp2.0\WebApi.runtimeconfig.json
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi\bin\Debug\netcoreapp2.0\WebApi.runtimeconfig.dev.json
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi\bin\Debug\netcoreapp2.0\WebApi.dll
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi\bin\Debug\netcoreapp2.0\WebApi.pdb
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi\obj\Debug\netcoreapp2.0\WebApi.dll
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi\obj\Debug\netcoreapp2.0\WebApi.pdb

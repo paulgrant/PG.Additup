@@ -1,0 +1,8 @@
+AJAX requests - used axios because of promises.
+Coud use standard fetch and wrap in promises.
+
+To increase the difficult we could have a user input that is then sent with the request for a new exercise.
+This would affect the validation and the placeholder text on inputs.
+
+
+In API consider using IActionResult as the return value from the controllers - this would enable HttpStatus codes to be sent.
