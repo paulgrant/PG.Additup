@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import MathOperator from '../game/mathOperator';
 import * as Constants from '../../utils/constants';
+import PropTypes from 'prop-types';
 
 class Exercise extends React.Component {
     state = {
@@ -130,7 +131,7 @@ class Exercise extends React.Component {
     render() {
         return (
             <div>
-                <form className="form-inline" onSubmit={this.handleSubmit} id="gameForm">
+                <form className="form" onSubmit={this.handleSubmit} id="gameForm">
                     { (this.state.currentGame) ? (
                     <div className="form-group">
                         <label className="mr-sm-2">{this.state.currentGame.leftNumber}</label>
@@ -172,6 +173,12 @@ class Exercise extends React.Component {
             </div>
         );
     }
+}
+
+Exercise.propTypes = {
+    reset: PropTypes.bool,
+    onSuccess: PropTypes.func,
+    setUserId: PropTypes.func
 }
 
 export default Exercise;

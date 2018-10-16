@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Timer extends React.Component {
     constructor(props) {
@@ -15,20 +16,12 @@ class Timer extends React.Component {
     }
 
     componentDidMount() {
-        //this.startTimer();
+        this.startTimer();
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.time !== undefined && nextProps.time !== this.state.time ) {
             this.setState({ time: nextProps.time });
-        }
-
-        if (nextProps.timerOn === true && !this.state.isOn) {
-            this.startTimer();
-        }
-        if (nextProps.timerOn === false && this.state.isOn) {
-            this.stopTimer();
-            this.resetTimer();
         }
     }
 
@@ -62,4 +55,11 @@ class Timer extends React.Component {
         )
     }
 }
+
+Timer.propTypes = {
+    time: PropTypes.number,
+    timerOn: PropTypes.bool, 
+    timerFinished: PropTypes.func
+}
+
 export default Timer;

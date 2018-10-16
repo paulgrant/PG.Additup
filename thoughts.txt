@@ -1,3 +1,5 @@
+
+
 AJAX requests - used axios because of promises.
 Coud use standard fetch and wrap in promises.
 
@@ -10,7 +12,7 @@ Used Moq to compliment Unit testing and mockj objects - alternatives = NSubstitu
 
 For persistance, I chose to use EF Core and Sqlite, it's light and all contained within VS.  Alternatives would be other SQL variants, Compact, Sql Server or mySql.  
 
-In the React app - implement Redux for single store of Game state
+In the React app - implement Redux for single store of Game and exercise state
 
 
 
