@@ -10,6 +10,8 @@ class Exercise extends React.Component {
             leftNumber:'',
             rightNumber:'',
             mathOperator: '',
+            userId: '',
+            exerciseId: 0
         },
         answer: '',
         isLoading: false,
@@ -17,13 +19,14 @@ class Exercise extends React.Component {
         formSubmittedError: false,
         showForm: true,
         formSubmittedSuccess: false,
-        errorText: ''
+        errorText: '',
+        isCorrectAnswer: false
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.reset !== undefined){
+        if(nextProps.reset === true){
             //this.setState({time: nextProps.resetExercise});
-            this.getQuestion();
+            //this.getQuestion();
         }
         
       }
@@ -34,11 +37,24 @@ class Exercise extends React.Component {
 
     getQuestion = () => {
         var self = this;
-        axios.get(Constants.BASE_URL + 'api/exercise')
+        return axios.get(Constants.BASE_URL + 'api/exercise')
         .then(res => {
+            if (typeof self.props.setUserId === 'function') {
+                self.props.setUserId(res.data.userId);
+            }
             self.setState({ currentGame: res.data });
-            var _stategames = this.state.games.concat([res.data]);
+            var _stategames = self.state.games.concat([res.data]);
             self.setState({ games: _stategames });
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .then(function () {
+            // always executed
+            if (self.state.currentGame === null || self.state.currentGame === "") {
+                self.props.onSuccess(-1);
+            }
         });
     }
 
@@ -49,12 +65,13 @@ class Exercise extends React.Component {
         this.validateFields();
 
         if (this.state.validationError === false) {
-            this.setState({ isLoading: true });
             var self = this;
-            axios({
+            return axios({
                 method: 'post',
                 url: Constants.BASE_URL + 'api/exercise',
                 data: {
+                    userId: this.state.currentGame.userId,
+                    exerciseId: this.state.currentGame.exerciseId,
                     leftNumber:this.state.currentGame.leftNumber,
                     rightNumber:this.state.currentGame.rightNumber,
                     mathOperator:this.state.currentGame.mathOperator,
@@ -67,21 +84,29 @@ class Exercise extends React.Component {
             .then(function (response) {
                 //handle success
                 console.log(response);
-                self.setState({ isLoading: false });
-                self.setState({formSubmittedSuccess: true});
-                if (typeof self.props.onSuccess === 'function') {
-                    self.props.onSuccess(1);
-                }
+                self.answeredCorrectly(response.data.correctAnswerGiven);
             })
             .catch(function (response) {
                 //handle error
                 console.log(response);
-                self.setState({ isLoading: false });
                 self.setState({formSubmittedSuccess: false});
                 if (typeof self.props.onSuccess === 'function') {
                     self.props.onSuccess(-1);
                 }
             });
+        };
+    }
+
+    answeredCorrectly = (isCorrect) => {
+        this.setState({ formSubmittedSuccess: true});
+        this.setState({ isCorrectAnswer: isCorrect});
+        if(this.state.isCorrectAnswer===true){
+            if (typeof this.props.onSuccess === 'function') {
+                this.props.onSuccess(1);
+            }
+            this.setState({ isLoading: false });
+            this.setState({ answer: '' });
+            this.getQuestion();
         }
     }
 
@@ -106,21 +131,6 @@ class Exercise extends React.Component {
         return (
             <div>
                 <form className="form-inline" onSubmit={this.handleSubmit} id="gameForm">
-                    {this.state.validationError === true ? (
-                        <div className="alert alert-danger">
-                            Invalid entry!
-            </div>
-                    ) : null}
-                    {this.state.formSubmittedSuccess === true ? (
-                        <div className="alert alert-success">
-                            Successfully answered
-            </div>
-                    ) : null}
-                    {this.state.formSubmittedError === true ? (
-                        <div className="alert alert-danger">
-                            Incorrect!
-            </div>
-                    ) : null}
                     { (this.state.currentGame) ? (
                     <div className="form-group">
                         <label className="mr-sm-2">{this.state.currentGame.leftNumber}</label>
@@ -131,7 +141,7 @@ class Exercise extends React.Component {
                                 placeholder="Min:-9999, Max:9999" min="-9999" max="9999"
                                 value={this.state.answer} onChange={this.handleChange} />
                         </div>
-                        <button id="my-account-save-button" className={"col-xs-8 colour8 bgcolour2 " + (this.props.hideSubmitButton === true ? 'hidden' : '')} type="submit" disabled={this.state.isLoading}>
+                        <button id="my-account-save-button" className={"col-xs-8 colour8 bgcolour2 " } type="submit" disabled={this.state.isLoading}>
                             {this.state.isLoading === false &&
                                 <div>
                                     Submit Answer <i className="fa fa-caret-right" aria-hidden="true"></i>
@@ -150,6 +160,15 @@ class Exercise extends React.Component {
                         <div>No exercises available</div>
                     ) }
                 </form>
+                {this.state.validationError === true ? (
+                <div className="alert alert-danger">Invalid entry!</div>
+                ) : null}
+                {this.state.formSubmittedSuccess === true ? (
+                    <div className="alert alert-success">Successfully answered</div>
+                ) : null}
+                {this.state.formSubmittedError === true ? (
+                <div className="alert alert-danger">Incorrect!</div>
+                ) : null}
             </div>
         );
     }

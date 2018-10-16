@@ -4,6 +4,8 @@ class Timer extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            reset: false,
+            start: false,
             time: this.props.time,
             isOn: false
         }
@@ -17,21 +19,21 @@ class Timer extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.time !== undefined) {
-            this.stopTimer();
+        if (nextProps.time !== undefined && nextProps.time !== this.state.time ) {
             this.setState({ time: nextProps.time });
         }
 
-        if (nextProps.start !== undefined) {
-            this.stopTimer();
+        if (nextProps.timerOn === true && !this.state.isOn) {
             this.startTimer();
+        }
+        if (nextProps.timerOn === false && this.state.isOn) {
+            this.stopTimer();
+            this.resetTimer();
         }
     }
 
     startTimer() {
-        this.setState({
-            isOn: true
-        })
+        this.setState({isOn: true});
         this.timer = setInterval(() => {
             var time = this.state.time;
             this.setState({ time: time - 1 });
@@ -49,12 +51,13 @@ class Timer extends React.Component {
         }
     }
     resetTimer() {
+        this.stopTimer();
         this.setState({ time: 0 })
     }
     render() {
         return (
-            <div>
-                <h3>timer: {this.state.time}</h3>
+            <div className="timerPanel">
+                <strong>Time Remaining</strong><h3>{this.state.time}</h3>
             </div>
         )
     }

@@ -3,20 +3,23 @@ import Timer from './timer';
 import SkillLevel from './skillLevel';
 import Exercise from './exercise';
 import * as Constants from '../../utils/constants';
+import './games.css';
 
 class Game extends React.Component {
     constructor(props){
         super(props)
         this.state = {
+            userId: '',
+            time: Constants.TIME_LIMIT,
             correctExercises: 0,
             skillLevel: 1,
-            timerStart: false,
-            timerReset: false,
+            timerOn: false,
             resetExercise: false,
             startButtonVisible:true,
             showExercises: false
         }
         this.startExercises = this.startExercises.bind(this);
+        this.timer = React.createRef();
       }
     
 
@@ -32,22 +35,27 @@ class Game extends React.Component {
             var newSkillLevel = Math.floor(self.state.correctExercises / Constants.LEVEL_SIZE) + 1;
             self.setState({ skillLevel : newSkillLevel });
         }
-        self.setState({ timerReset:!self.state.timerReset});
-        self.setState({ resetExercise: !self.state.resetExercise });
+        //self.setState({ timerOn: false });
+        self.setState({ time: Constants.TIME_LIMIT });
     }
 
     timerFinished = () => {
         var self = this;
         self.setState({ startButtonVisible: true});
-        self.setState({ showExercises: false })
+        self.setState({ showExercises: false });
     }
 
     startExercises = () => {
         var self = this;
         self.setState({ startButtonVisible: false })
-        self.setState({ resetExercise: !self.state.resetExercise });
-        self.setState({ timerStart: !self.state.timerStart });
         self.setState({ showExercises: true });
+        self.setState({ resetExercise: true });
+        self.setState({ timerOn: true });
+    }
+
+    setUserId = (userId) => {
+        var self = this;
+        self.setState({ userId: userId});
     }
 
     componentDidMount() {
@@ -60,9 +68,11 @@ class Game extends React.Component {
                 <h1>Add it up!</h1>
                 { (this.state.showExercises) ? (
                 <div>
-                    <Exercise reset={this.state.resetExercise} onSuccess={this.correctAnswerHandler} />
-                    <Timer time={30} reset={this.state.timerReset} start={this.state.timerStart} timerFinished={this.timerFinished} />
-                    <SkillLevel level={this.state.skillLevel} />
+                    <Exercise reset={this.state.resetExercise} onSuccess={this.correctAnswerHandler} setUserId={this.setUserId} />
+                    <div className="timerSkillPanel">
+                        <Timer time={this.state.time} timerOn={this.state.timerOn} timerFinished={this.timerFinished} />
+                        <SkillLevel level={this.state.skillLevel} />
+                    </div>
                 </div>
                 ) : null}
                 { (this.state.startButtonVisible) ? (

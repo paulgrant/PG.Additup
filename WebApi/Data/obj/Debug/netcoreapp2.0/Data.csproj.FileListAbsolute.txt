@@ -1,0 +1,9 @@
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\Data\bin\Debug\netcoreapp2.0\Data.deps.json
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\Data\bin\Debug\netcoreapp2.0\Data.dll
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\Data\bin\Debug\netcoreapp2.0\Data.pdb
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\Data\obj\Debug\netcoreapp2.0\Data.csprojAssemblyReference.cache
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\Data\obj\Debug\netcoreapp2.0\Data.csproj.CoreCompileInputs.cache
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\Data\obj\Debug\netcoreapp2.0\Data.AssemblyInfoInputs.cache
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\Data\obj\Debug\netcoreapp2.0\Data.AssemblyInfo.cs
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\Data\obj\Debug\netcoreapp2.0\Data.dll
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\Data\obj\Debug\netcoreapp2.0\Data.pdb
