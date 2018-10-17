@@ -11,6 +11,7 @@ namespace WebApi.Data
     public class ExerciseContext : DbContext, IDataContext
     {
         public DbSet<Exercise> Exercise { get; set; }
+        public DbSet<Score> Score { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

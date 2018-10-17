@@ -36,7 +36,8 @@ class Game extends React.Component {
             self.setState({ skillLevel : newSkillLevel });
         }
         //self.setState({ timerOn: false });
-        self.setState({ time: Constants.TIME_LIMIT });
+        var reducedTime = this.stat.time--;
+        self.setState({ time: reducedTime });
     }
 
     timerFinished = () => {

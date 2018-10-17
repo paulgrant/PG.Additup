@@ -11,12 +11,39 @@ namespace WebApi.Services
 {
     public class ExerciseService : Service<Exercise>, IExerciseService
     {
-        public ExerciseService(IRepository<Exercise> repository) : base(repository)
+        private const int maxTriesForFindingNoMatch = 3;
+        private IExerciseRepository _repository;
+        public ExerciseService(IExerciseRepository repository) : base(repository)
         {
+            _repository = repository;
         }
 
         // Method to create an exercise of type a + b = ?
         public Exercise createExercise(string userId, Difficulty difficulty = Difficulty.simple)
+        {
+            var tries = 1;
+            var uniqueQuestion = false;
+            Exercise newExercise = new Exercise();
+            while (uniqueQuestion == false && tries <= maxTriesForFindingNoMatch) {
+                newExercise = GenerateNewQuestion(difficulty);
+                //check that the question is not a duplicate of a current unanswered question.
+                var matches = _repository.GetUnansweredMatch(newExercise);
+                if (matches == null || matches.Count() == 0)
+                {
+                    uniqueQuestion = true;
+                }
+                tries++;
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                newExercise.userId = Guid.NewGuid();
+            }
+            Insert(newExercise);
+            return newExercise;
+        }
+
+        private Exercise GenerateNewQuestion(Difficulty difficulty)
         {
             var newExercise = new Exercise();
             var rnd = new Random();
@@ -46,11 +73,7 @@ namespace WebApi.Services
                 case Difficulty.easy:
                     break;
             }
-            if (string.IsNullOrEmpty(userId))
-            {
-                newExercise.userId = Guid.NewGuid();
-            }
-            Insert(newExercise);
+
             return newExercise;
         }
 

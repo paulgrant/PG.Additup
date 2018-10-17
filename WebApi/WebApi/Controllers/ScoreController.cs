@@ -16,49 +16,31 @@ namespace WebApi.Controllers
         private readonly IScoreService _service;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ExerciseController(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, IScoreService exerciseService)
+        public ScoreController(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, IScoreService service)
         {
             _loggerFactory = loggerFactory;
-            _logger = _loggerFactory.CreateLogger("Exercices");
-            _service = exerciseService;
+            _logger = _loggerFactory.CreateLogger("Scores");
+            _service = service;
             _unitOfWork = unitOfWork;
         }
 
         // GET api/exercise
         [HttpGet]
-        public Exercise GetExercise(string userId, Difficulty difficulty = Difficulty.simple)
+        public Score Get(string userId)
         {
             try
             {
-                // TODO - check valid user 
-                //if(!this.IsValidUser(userId)) { return StatusCode(HttpStatusCode.Unauthorized); }
-                var _currentExercise = _service.createExercise(userId, difficulty);
-                _unitOfWork.SaveChanges();
-                return _currentExercise;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    throw new ArgumentOutOfRangeException("userId is empty");
+                };
+                var _score = _service.GetByUserId(userId);
+                return _score;
             }
             catch (Exception exc)
             {
                 _logger.LogError(exc, "Failed to generate exercise");
                 return null;
-            }
-        }
-
-
-        // POST api/exercise
-        [HttpPost]
-        public Exercise PostAnswer([FromBody]Exercise exercise)
-        {
-            try
-            {
-                var checkedEx = exercise;
-                var savedExercise = _service.checkAnswer(checkedEx);
-                _unitOfWork.SaveChanges();
-                return savedExercise;
-            }
-            catch (Exception exc)
-            {
-                _logger.LogError(exc, "Failed to generate exercise");
-                throw new InvalidProgramException();
             }
         }
     }

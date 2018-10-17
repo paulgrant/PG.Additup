@@ -15,3 +15,4 @@ C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi.Tests\bin\Debug\netcoreap
 C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi.Tests\obj\Debug\netcoreapp2.0\WebApi.Tests.csproj.CopyComplete
 C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi.Tests\obj\Debug\netcoreapp2.0\WebApi.Tests.dll
 C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi.Tests\obj\Debug\netcoreapp2.0\WebApi.Tests.pdb
+C:\Users\paulg\Documents\Work\PG.Additup\WebApi\WebApi.Tests\bin\Debug\netcoreapp2.0\appsettings.json

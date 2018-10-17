@@ -12,6 +12,7 @@ using WebApi.Services;
 using WebApi.Services.Interfaces;
 using WebApi.Model;
 using WebApi.Data;
+using WebApi.Models;
 
 namespace WebApi
 {
@@ -28,8 +29,12 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IExerciseService, ExerciseService>();
+            services.AddSingleton<IScoreService, ScoreService>();
+            services.AddSingleton<IExerciseRepository, ExerciseRepository>();
+            services.AddSingleton<IScoreRepository, ScoreRepository>();
             services.AddSingleton<ILoggerFactory, LoggerFactory>();
             services.AddSingleton<IRepository<Exercise>, Repository<Exercise>>();
+            services.AddSingleton<IRepository<Score>, Repository<Score>>();
             services.AddSingleton<IDataContext, ExerciseContext>();
             services.AddSingleton<IUnitOfWork, UnitOfWork>();
 

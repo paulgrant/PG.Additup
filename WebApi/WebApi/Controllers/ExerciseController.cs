@@ -5,6 +5,7 @@ using WebApi.Enums;
 using Microsoft.Extensions.Logging;
 using WebApi.Services.Interfaces;
 using WebApi.Data;
+using WebApi.Models.ViewModels;
 
 namespace WebApi.Controllers
 {
@@ -14,51 +15,76 @@ namespace WebApi.Controllers
         ILoggerFactory _loggerFactory;
         private ILogger _logger;
         private readonly IExerciseService _service;
+        private readonly IScoreService _scoreService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ExerciseController(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, IExerciseService exerciseService)
+        public ExerciseController(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, IExerciseService exerciseService, IScoreService scoreService)
         {
             _loggerFactory = loggerFactory;
             _logger = _loggerFactory.CreateLogger("Exercices");
             _service = exerciseService;
+            _scoreService = scoreService;
             _unitOfWork = unitOfWork;
         }
 
         // GET api/exercise
         [HttpGet]
-        public Exercise GetExercise(string userId, Difficulty difficulty = Difficulty.simple)
+        public IActionResult GetExercise(string userId, Difficulty difficulty = Difficulty.simple)
         {
             try
             {
-                // TODO - check valid user 
-                //if(!this.IsValidUser(userId)) { return StatusCode(HttpStatusCode.Unauthorized); }
                 var _currentExercise = _service.createExercise(userId, difficulty);
                 _unitOfWork.SaveChanges();
-                return _currentExercise;
+                var newScore = _scoreService.IncrementScore(_currentExercise.userId.ToString());
+                _unitOfWork.SaveChanges();
+                var response = new ExerciseScoreModel()
+                {
+                    exerciseId = _currentExercise.exerciseId,
+                    leftNumber = _currentExercise.leftNumber,
+                    rightNumber = _currentExercise.rightNumber,
+                    mathOperator = _currentExercise.mathOperator,
+                    answer = _currentExercise.answer,
+                    userId = _currentExercise.userId,
+                    level = newScore.level,
+                    highScore = newScore.highScore,
+                };
+                return Ok(response);
             }
             catch (Exception exc)
             {
                 _logger.LogError(exc, "Failed to generate exercise");
-                return null;
+                return StatusCode(500);
             }
         }
 
 
         // POST api/exercise
         [HttpPost]
-        public Exercise PostAnswer([FromBody]Exercise exercise)
+        public IActionResult PostAnswer([FromBody]Exercise exercise)
         {
             try
             {
                 var checkedEx = exercise;
                 var savedExercise = _service.checkAnswer(checkedEx);
+                Score newScore = null;
+                if(savedExercise.correctAnswerGiven)
+                {
+                    newScore = _scoreService.IncrementScore(savedExercise.userId.ToString());
+                }
+                
                 _unitOfWork.SaveChanges();
-                return savedExercise;
+                var response = new ExerciseScoreModel()
+                {
+                    exercise = savedExercise,
+                    score = newScore
+                };
+                return Ok(response);
             }
             catch (Exception exc)
             {
                 _logger.LogError(exc, "Failed to generate exercise");
-                throw new InvalidProgramException();
+                //throw new InvalidProgramException();
+                return StatusCode(500);
             }
         }
     }
