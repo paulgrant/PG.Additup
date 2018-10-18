@@ -9,7 +9,7 @@ using WebApi.Models.ViewModels;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/exercise")]
     public class ExerciseController : Controller
     {
         ILoggerFactory _loggerFactory;
@@ -28,15 +28,14 @@ namespace WebApi.Controllers
         }
 
         // GET api/exercise
-        [HttpGet]
-        public IActionResult GetExercise(string userId, Difficulty difficulty = Difficulty.simple)
+        [HttpGet("{id?}")]
+        public IActionResult GetExercise(string id = null)
         {
             try
             {
-                var _currentExercise = _service.createExercise(userId, difficulty);
+                var _currentExercise = _service.createExercise(id);
                 _unitOfWork.SaveChanges();
-                var newScore = _scoreService.IncrementScore(_currentExercise.userId.ToString());
-                _unitOfWork.SaveChanges();
+                var newScore = _scoreService.GetByUserId(_currentExercise.userId.ToString());
                 var response = new ExerciseScoreModel()
                 {
                     exerciseId = _currentExercise.exerciseId,
@@ -45,8 +44,8 @@ namespace WebApi.Controllers
                     mathOperator = _currentExercise.mathOperator,
                     answer = _currentExercise.answer,
                     userId = _currentExercise.userId,
-                    level = newScore.level,
-                    highScore = newScore.highScore,
+                    level = newScore !=null ? newScore.level : 1,
+                    highScore = newScore != null ? newScore.highScore : 0
                 };
                 return Ok(response);
             }
@@ -75,8 +74,15 @@ namespace WebApi.Controllers
                 _unitOfWork.SaveChanges();
                 var response = new ExerciseScoreModel()
                 {
-                    exercise = savedExercise,
-                    score = newScore
+                    exerciseId = savedExercise.exerciseId,
+                    leftNumber = savedExercise.leftNumber,
+                    rightNumber = savedExercise.rightNumber,
+                    mathOperator = savedExercise.mathOperator,
+                    answer = savedExercise.answer,
+                    userId = savedExercise.userId,
+                    correctAnswerGiven = savedExercise.correctAnswerGiven,
+                    level = newScore.level,
+                    highScore = newScore.highScore
                 };
                 return Ok(response);
             }

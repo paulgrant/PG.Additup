@@ -74,7 +74,7 @@ namespace WebApi.Tests
             newExercise.leftNumber = 2;
             newExercise.rightNumber = 2;
             newExercise.mathOperator = Enums.Operator.add;
-            newExercise.answer = "4";
+            newExercise.answer = 4;
             newExercise.userId = Guid.NewGuid();
 
             var mock = new Mock<IExerciseRepository>();
@@ -92,7 +92,7 @@ namespace WebApi.Tests
             newExercise.leftNumber = 2;
             newExercise.rightNumber = 2;
             newExercise.mathOperator = Enums.Operator.add;
-            newExercise.answer = "4";
+            newExercise.answer = 4;
             var mock = new Mock<IExerciseRepository>();
             mock.Setup(m => m.Find(It.IsAny<int>())).Returns(newExercise);
             _service = new ExerciseService(mock.Object);
@@ -107,7 +107,7 @@ namespace WebApi.Tests
             newExercise.leftNumber = 2;
             newExercise.rightNumber = 2;
             newExercise.mathOperator = Enums.Operator.add;
-            newExercise.answer = "5";
+            newExercise.answer = 5;
             newExercise.userId = Guid.NewGuid();
             var mock = new Mock<IExerciseRepository>();
             mock.Setup(m => m.Find(It.IsAny<int>())).Returns(newExercise);
@@ -123,7 +123,7 @@ namespace WebApi.Tests
             newExercise.leftNumber = 2;
             newExercise.rightNumber = 2;
             newExercise.mathOperator = Enums.Operator.add;
-            newExercise.answer = "5";
+            newExercise.answer = 5;
             newExercise.userId = Guid.NewGuid();
             var mock = new Mock<IExerciseRepository>();
             mock.Setup(m => m.Find(It.IsAny<int>())).Returns(newExercise);

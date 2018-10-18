@@ -30,6 +30,14 @@ namespace WebApi.Repository
             return _repository.Find(id);
         }
 
+        public IList<Exercise> FindByUserId(Guid userId)
+        {
+            return _repository
+               .Queryable()
+               .Where(u => u.userId.Equals(userId.ToString()))
+               .ToList();
+        }
+
         public IEnumerable<Exercise> GetAll()
         {
             return _repository.GetAll();
@@ -42,7 +50,7 @@ namespace WebApi.Repository
                 .Where(u => u.leftNumber == exercise.leftNumber
                     && u.mathOperator == exercise.mathOperator
                     && u.rightNumber == exercise.rightNumber
-                    && string.IsNullOrEmpty(u.answer)
+                    && u.answer == null
                     && u.correctAnswerGiven == false)
                 .ToList();
         }

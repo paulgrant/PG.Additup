@@ -6,7 +6,7 @@ import * as Constants from '../../utils/constants';
 import './games.css';
 
 class Game extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
             userId: '',
@@ -15,34 +15,32 @@ class Game extends React.Component {
             skillLevel: 1,
             timerOn: false,
             resetExercise: false,
-            startButtonVisible:true,
+            startButtonVisible: true,
             showExercises: false
         }
         this.startExercises = this.startExercises.bind(this);
         this.timer = React.createRef();
-      }
-    
+    }
 
     correctAnswerHandler = (value) => {
         var self = this;
-        if(value === -1)
-        {
-            self.setState({correctExercises: 0});
+        if (value === -1) {
+            self.setState({ correctExercises: 0 });
+            self.setState({ startButtonVisible: true });
+            self.setState({ timerOn: false });
+            self.setState({ showExercises: false });
         }
-        else
-        {
-            self.setState({correctExercises: self.state.correctExercises + 1});
-            var newSkillLevel = Math.floor(self.state.correctExercises / Constants.LEVEL_SIZE) + 1;
-            self.setState({ skillLevel : newSkillLevel });
+        else {
+            self.setState({ correctExercises: self.state.correctExercises + 1 });
+            self.setState({ skillLevel: self.state.level });
+            var reducedTime = this.state.time;
+            self.setState({ time: (reducedTime - 1) });
         }
-        //self.setState({ timerOn: false });
-        var reducedTime = this.stat.time--;
-        self.setState({ time: reducedTime });
     }
 
     timerFinished = () => {
         var self = this;
-        self.setState({ startButtonVisible: true});
+        self.setState({ startButtonVisible: true });
         self.setState({ showExercises: false });
     }
 
@@ -51,12 +49,18 @@ class Game extends React.Component {
         self.setState({ startButtonVisible: false })
         self.setState({ showExercises: true });
         self.setState({ resetExercise: true });
+        self.setState({ time: Constants.TIME_LIMIT });
         self.setState({ timerOn: true });
     }
 
     setUserId = (userId) => {
         var self = this;
-        self.setState({ userId: userId});
+        self.setState({ userId: userId });
+    }
+
+    setSkillLevel = (level) => {
+        var self = this;
+        self.setState({ skillLevel: level });
     }
 
     componentDidMount() {
@@ -67,17 +71,18 @@ class Game extends React.Component {
         return (
             <div>
                 <h1>Add it up!</h1>
-                { (this.state.showExercises) ? (
-                <div>
-                    <Exercise reset={this.state.resetExercise} onSuccess={this.correctAnswerHandler} setUserId={this.setUserId} />
-                    <div className="timerSkillPanel">
-                        <Timer time={this.state.time} timerOn={this.state.timerOn} timerFinished={this.timerFinished} />
-                        <SkillLevel level={this.state.skillLevel} />
+                {(this.state.showExercises) ? (
+                    <div>
+                        <Exercise reset={this.state.resetExercise} onSuccess={this.correctAnswerHandler} setUserId={this.setUserId} setSkillLevel={this.setSkillLevel} />
+                        <div className="timerSkillPanel">
+                            <Timer time={this.state.time} timerOn={this.state.timerOn} timerFinished={this.timerFinished} />
+                            <SkillLevel level={this.state.skillLevel} />
+                            <strong>{ this.state.correctExercises }</strong>
+                        </div>
                     </div>
-                </div>
                 ) : null}
-                { (this.state.startButtonVisible) ? (
-                <button onClick={this.startExercises}>Start</button>
+                {(this.state.startButtonVisible) ? (
+                    <button onClick={this.startExercises}>Start</button>
                 ) : null}
             </div>
         );

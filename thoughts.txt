@@ -1,19 +1,33 @@
+NOTES
+==============================================
+
+Front end considerations
+---------------------------------------------
+Bootstrap 4.0 for layout - I used this to make the solution responsive
+
+For AJAX requests - used axios because of the use of promises, better error response handling and the transformation of JSON. Could use standard fetch and call .json()
+
+I used standard React without Redux for this solution.  Redux would certainly make it easier to handle data - all components would "subscribe" to the data they require.
+
+The game component is the glue that ties this solution together - with Redux, there would be less reliance on Game.
+
+The common library stumped me - I set up the create-react-app initially to get the basics done and working.  I couldn't see how to reference the common library from within the app, apart from manually coopying the generate file.
 
 
-AJAX requests - used axios because of promises.
-Coud use standard fetch and wrap in promises.
+API considerations
+---------------------------------------------
+In API, I changed the return object of the controller from Exercise object to IActionResult.  This would enable me to send a different model and in case of failure , HttpStatus codes to be sent, separating out concerns of data.
 
-To increase the difficulty we could have a user input (eg.slider) that is then sent with the request for a new exercise.
-This would affect the validation and the placeholder text on inputs.
+Interfaces were used externsively to aid unit testing. I used Moq to compliment Unit testing and mock objects - alternatives = NSubstitute, FakeItEasy
 
-In API, consider using IActionResult as the return value from the controllers - this would enable HttpStatus codes to be sent, separating out concerns of data.
+For persistance, I chose to use EF Core and Sqlite, it's light and all contained within VS and within the solution folder, no database connectionstrings etc required.  
+Alternatives would be other SQL variants, Compact, Sql Server or mySql.  
 
-Used Moq to compliment Unit testing and mockj objects - alternatives = NSubstitute, FakeItEasy
-
-For persistance, I chose to use EF Core and Sqlite, it's light and all contained within VS.  Alternatives would be other SQL variants, Compact, Sql Server or mySql.  
-
-In the React app - implement Redux for single store of Game and exercise state
+I implemented UnitOfWork in the API, I like this pattern to give seperation from persistance.
 
 
-
-
+ASSUMPTIONS
+==============================================
+When the user gets an incorrect question - the game is reset.
+I used guid datatype for userId - easier to generate userId's and less likely of duplicates.
+As another feature to the system - I added difficulty, so that I could manually run through and test end to end.  This could be automated with Selenium or Cypress.io

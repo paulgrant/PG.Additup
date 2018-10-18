@@ -9,5 +9,6 @@ namespace WebApi.Repository
     public interface IExerciseRepository : IRepository<Exercise>
     {
         IList<Exercise> GetUnansweredMatch(Exercise exercise);
+        IList<Exercise> FindByUserId(Guid userId);
     }
 }

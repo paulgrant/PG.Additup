@@ -21,7 +21,7 @@ namespace WebApi.Migrations
                     b.Property<int>("exerciseId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("answer");
+                    b.Property<double?>("answer");
 
                     b.Property<bool>("correctAnswerGiven");
 
@@ -36,6 +36,20 @@ namespace WebApi.Migrations
                     b.HasKey("exerciseId");
 
                     b.ToTable("Exercise");
+                });
+
+            modelBuilder.Entity("WebApi.Model.Score", b =>
+                {
+                    b.Property<Guid>("userId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("highScore");
+
+                    b.Property<int>("level");
+
+                    b.HasKey("userId");
+
+                    b.ToTable("Score");
                 });
 #pragma warning restore 612, 618
         }

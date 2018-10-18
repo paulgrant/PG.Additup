@@ -67,6 +67,26 @@ namespace WebApi
             loggerFactory.AddDebug();
 
             app.UseMvc();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "api/{controller}/{action}/{id?}");
+
+            //    routes.MapRoute(
+            //        name: "default1",
+            //        template: "{controller}/{action}/{id?}");
+
+            //    routes.MapRoute(
+            //        name: "exercise",
+            //        template: "api/exercise/{id?}",
+            //        defaults: new { controller = "Exercise", action = "GetExercise" });
+
+            //    routes.MapRoute(
+            //        name: "exercise1",
+            //        template: "exercise/{id?}",
+            //        defaults: new { controller = "Exercise", action = "GetExercise" });
+            //});
         }
     }
 }

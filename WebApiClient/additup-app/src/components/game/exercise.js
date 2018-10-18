@@ -6,14 +6,11 @@ import PropTypes from 'prop-types';
 
 class Exercise extends React.Component {
     state = {
-        games: [],
-        currentGame: {
-            leftNumber:'',
-            rightNumber:'',
-            mathOperator: '',
-            userId: '',
-            exerciseId: 0
-        },
+        leftNumber:'',
+        rightNumber:'',
+        mathOperator: 0,
+        userId: '',
+        exerciseId: 0,
         answer: '',
         isLoading: false,
         validationError: false,
@@ -26,10 +23,8 @@ class Exercise extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.reset === true){
-            //this.setState({time: nextProps.resetExercise});
-            //this.getQuestion();
-        }
-        
+
+        }       
       }
 
     componentDidMount() {
@@ -38,18 +33,30 @@ class Exercise extends React.Component {
 
     getQuestion = () => {
         var self = this;
-        return axios.get(Constants.BASE_URL + 'api/exercise')
+        var url = Constants.BASE_URL + 'api/exercise';
+        if(this.state.userId !== ''){
+            url = Constants.BASE_URL + 'api/exercise/' + this.state.userId;
+        }
+        return axios.get(url)
         .then(res => {
             if (typeof self.props.setUserId === 'function') {
                 self.props.setUserId(res.data.userId);
             }
-            self.setState({ currentGame: res.data });
-            var _stategames = self.state.games.concat([res.data]);
-            self.setState({ games: _stategames });
+            if (typeof self.props.setSkillLevel === 'function') {
+                self.props.setSkillLevel(res.data.level);
+            }
+            self.setState({ leftNumber: res.data.leftNumber });
+            self.setState({ rightNumber: res.data.rightNumber });
+            self.setState({ mathOperator: res.data.mathOperator });
+            self.setState({ exerciseId: res.data.exerciseId });
+            self.setState({ userId: res.data.userId })
         })
         .catch(function (error) {
             // handle error
             console.log(error);
+            if (self.state.currentGame === null || self.state.currentGame === "") {
+                self.props.onSuccess(-1);
+            }
         })
         .then(function () {
             // always executed
@@ -71,11 +78,11 @@ class Exercise extends React.Component {
                 method: 'post',
                 url: Constants.BASE_URL + 'api/exercise',
                 data: {
-                    userId: this.state.currentGame.userId,
-                    exerciseId: this.state.currentGame.exerciseId,
-                    leftNumber:this.state.currentGame.leftNumber,
-                    rightNumber:this.state.currentGame.rightNumber,
-                    mathOperator:this.state.currentGame.mathOperator,
+                    userId: this.state.userId,
+                    exerciseId: this.state.exerciseId,
+                    leftNumber:this.state.leftNumber,
+                    rightNumber:this.state.rightNumber,
+                    mathOperator:this.state.mathOperator,
                     answer:this.state.answer,
                   },
                 config: { 
@@ -101,13 +108,18 @@ class Exercise extends React.Component {
     answeredCorrectly = (isCorrect) => {
         this.setState({ formSubmittedSuccess: true});
         this.setState({ isCorrectAnswer: isCorrect});
-        if(this.state.isCorrectAnswer===true){
+        if(isCorrect){
             if (typeof this.props.onSuccess === 'function') {
                 this.props.onSuccess(1);
             }
             this.setState({ isLoading: false });
             this.setState({ answer: '' });
             this.getQuestion();
+        }
+        else{
+            if (typeof this.props.onSuccess === 'function') {
+                this.props.onSuccess(-1);
+            }
         }
     }
 
@@ -132,17 +144,19 @@ class Exercise extends React.Component {
         return (
             <div>
                 <form className="form" onSubmit={this.handleSubmit} id="gameForm">
-                    { (this.state.currentGame) ? (
+                    { (this.state.leftNumber) ? (
                     <div className="form-group">
-                        <label className="mr-sm-2">{this.state.currentGame.leftNumber}</label>
-                        <label className="mr-sm-2"><MathOperator operator={this.state.currentGame.mathOperator}></MathOperator></label>
-                        <label className="mr-sm-2">{this.state.currentGame.rightNumber}</label>
-                        <div className="col-sm-6 col-xs-12">
+                        <div className="col-xs-6">
+                            <label className="mr-sm-2">{this.state.leftNumber}</label>
+                            <label className="mr-sm-2"><MathOperator operator={this.state.mathOperator}></MathOperator></label>
+                            <label className="mr-sm-2">{this.state.rightNumber}</label>
+                        </div>
+                        <div className="col-xs-6">
                             <input id="game-form-answer-input" type="number" name="answer" required
                                 placeholder="Min:-9999, Max:9999" min="-9999" max="9999"
                                 value={this.state.answer} onChange={this.handleChange} />
                         </div>
-                        <button id="my-account-save-button" className={"col-xs-8 colour8 bgcolour2 " } type="submit" disabled={this.state.isLoading}>
+                        <button id="my-account-save-button" className={"col-xs-12 colour8 bgcolour2 " } type="submit" disabled={this.state.isLoading}>
                             {this.state.isLoading === false &&
                                 <div>
                                     Submit Answer <i className="fa fa-caret-right" aria-hidden="true"></i>

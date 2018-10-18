@@ -11,7 +11,7 @@ namespace WebApi.Model
         public int leftNumber { get; set; }
         public int rightNumber { get; set; }
         public Operator mathOperator { get; set; }
-        public string answer { get; set; }
+        public double? answer { get; set; }
         public bool correctAnswerGiven { get;set; }
         public Guid userId { get; set; }
     }
